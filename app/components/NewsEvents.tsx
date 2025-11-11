@@ -10,8 +10,8 @@ import "swiper/css";
 const sliderImages = [
   "/slide-1.jpg",
   "/slide-2.jpg",
-  "/slider-3.png",
-  "/slider-4.png",
+  "/slider-3.jpg",
+  "/slider-4.jpg",
 ];
 
 export default function NewsEvents() {

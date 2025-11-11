@@ -5,8 +5,8 @@ import Image from "next/image";
 
 import slider1 from "../../public/slide-1.jpg";
 import slider2 from "../../public/slide-2.jpg";
-import slider3 from "../../public/slider-3.png";
-import slider4 from "../../public/slider-4.png";
+import slider3 from "../../public/slider-3.jpeg";
+import slider4 from "../../public/slider-4.jpeg";
 import slider5 from "../../public/slider-5.png";
 
 const products = [

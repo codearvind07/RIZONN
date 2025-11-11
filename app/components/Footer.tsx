@@ -1,14 +1,10 @@
-"use client";
-
 import { FaLinkedinIn, FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
 
 export default function Footer() {
   return (
     <footer className="w-full bg-[#111] text-gray-300 pt-16 pb-10 relative overflow-hidden">
 
-      {/* Background subtle pattern (optional) */}
-      <div className="absolute inset-0 bg-[url('/footer-pattern.png')] bg-right bg-no-repeat opacity-[0.15]" />
-
+    
       {/* CONTENT WRAPPER */}
       <div className="relative mx-auto max-w-7xl px-6">
 

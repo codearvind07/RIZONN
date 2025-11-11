@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import slider1 from "../../public/slide-1.jpg";
-import slider2 from "../../public/slide-2.jpg";
-import slider3 from "../../public/slider-3.png";
+import slider2 from "../../public/slider-4.jpeg";
+import slider3 from "../../public/slider-3.jpeg";
 
 const slides = [slider1, slider2, slider3];
 
@@ -64,6 +64,41 @@ export default function Hero() {
                 fill
                 className="object-cover"
               />
+              
+              {/* Text content for slider1 (index 0) */}
+              {i === 0 && (
+                <div className="absolute inset-0 flex flex-col items-start justify-start text-white text-left pl-55 pr-4 pt-40 z-10 hidden md:block">
+                  <h2 className="text-4xl md:text-2xl font-bold mb-2">Rizonn</h2>
+                  <h3 className="text-3xl md:text-xl font-semibold mb-8">Where Inspiration Moves Ahead.</h3>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                    Learn More
+                  </button>
+                </div>
+              )}
+              
+              {/* Text content for slider2 (index 1) */}
+              {i === 1 && (
+                <div className="absolute inset-0 flex flex-col items-start justify-start text-white text-left pl-25 pr-4 pt-40 z-10 hidden md:block">
+                  <h2 className="text-4xl md:text-2xl font-bold mb-2">Discover the Complete</h2>
+                  <h3 className="text-3xl md:text-xl font-semibold mb-2">Windows-Based Microsoft Teams</h3>
+                  <h3 className="text-3xl md:text-xl font-semibold mb-8">Rooms Ecosystem</h3>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                    Learn More
+                  </button>
+                </div>
+              )}
+              
+              {/* Text content for slider3 (index 2) */}
+              {i === 2 && (
+                <div className="absolute inset-0 flex flex-col items-start justify-start text-white text-left pl-55 pr-4 pt-40 z-10 hidden md:block">
+                  <h2 className="text-4xl md:text-2xl font-bold mb-2">Rizonn XBAR.</h2>
+                  <h3 className="text-3xl md:text-xl font-semibold mb-2">Rizonn FLEXIBILITY.</h3>
+                  <h3 className="text-3xl md:text-xl font-semibold mb-8">Windows. MDEP - Android. USB.</h3>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                    Learn More
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}

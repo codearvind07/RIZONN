@@ -53,9 +53,9 @@ export default function EnterprisePage() {
 
   const currentContent = sectionContent[activeSection];
 
-  const enterpriseImage = "/slider-3.png";
+  const enterpriseImage = "/slider-3.jpeg";
   const educationImage = "/slide-2.jpg";
-  const personImage = "/slider-1.jpg";
+  const personImage = "/slide-1.jpg";
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-[#F8FAFF] to-[#EEF1F7] flex">

@@ -5,7 +5,7 @@ export default function AboutSection() {
     <section className="relative w-full py-24 bg-[#0A0A0A] text-white overflow-hidden">
 
       {/* Background world map dots (exact style like image) */}
-      <div className="absolute inset-0 bg-[url('/about-dots.png')] bg-cover bg-center opacity-[0.25]" />
+      {/* Background pattern removed as image not found */}
 
       {/* Black gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-black/95" />
