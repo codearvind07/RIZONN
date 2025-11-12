@@ -85,7 +85,7 @@ export default function Header() {
               onMouseLeave={() => setIsProductsDropdownOpen(false)}
             >
               <button 
-                className="hover:text-blue-400 transition-colors text-sm flex items-center gap-1 focus:outline-none"
+                className="hover:text-blue-400 transition-colors text-sm flex items-center gap-1 focus:outline-none py-2"
               >
                 Products
                 <svg 

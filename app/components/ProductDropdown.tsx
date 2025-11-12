@@ -12,7 +12,7 @@ interface ProductDropdownProps {
 export default function ProductDropdown({ isOpen, onClose }: ProductDropdownProps) {
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
-  // ✅ Escape key closes dropdown + body-scroll lock
+  // ✅ Escape key closes dropdown
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -20,282 +20,287 @@ export default function ProductDropdown({ isOpen, onClose }: ProductDropdownProp
 
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
+  const selectedCategory = openCategory 
+    ? productCategories.find((cat: ProductCategory) => cat.title === openCategory)
+    : null;
+
   return (
     <div
       className="
-        fixed top-16 left-0 right-0 z-[9999]
-        bg-black/20 backdrop-blur-sm
-        transition-opacity duration-300 ease-out
+        absolute top-full left-0 mt-3 z-[9999]
+        w-[960px] max-w-[calc(100vw-2rem)]
+        bg-gradient-to-br from-white via-white to-slate-50/50
+        rounded-2xl
+        overflow-hidden
+        transition-all duration-300 ease-out
+        backdrop-blur-xl
+        border border-slate-200/60
       "
-      onClick={onClose} // ✅ Clicking outside closes menu
+      style={{
+        boxShadow: `
+          0 25px 50px -12px rgba(0, 0, 0, 0.15),
+          0 0 0 1px rgba(255, 255, 255, 0.8),
+          inset 0 1px 0 0 rgba(255, 255, 255, 0.9)
+        `,
+        background: 'linear-gradient(to bottom right, #ffffff, #ffffff, #f8fafc)'
+      }}
+      onMouseLeave={() => setOpenCategory(null)}
+      onClick={(e) => e.stopPropagation()}
     >
-      {/* ✅ Dropdown Panel */}
-      <div
-        className="
-          absolute top-0 left-0 right-0 
-          max-h-[calc(100vh-4rem)] overflow-y-auto
-          bg-white shadow-2xl border-t border-gray-200
-          transition-all duration-300 ease-out
-          rounded-b-2xl
-        "
-        onClick={(e) => e.stopPropagation()} // ✅ Prevent close on inside click
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-1">
-              {productCategories.map((category: ProductCategory, index: number) => (
-                <div 
-                  key={index} 
-                  className="mb-2 relative"
-                  onMouseEnter={() => category.subItems && setOpenCategory(category.title)}
-                  onMouseLeave={() => category.subItems && setOpenCategory(null)}
+      {/* Premium Arrow pointing up */}
+      <div 
+        className="absolute -top-2 left-8 w-4 h-4 transform rotate-45 z-10"
+        style={{
+          background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
+          borderLeft: '1px solid rgba(226, 232, 240, 0.6)',
+          borderTop: '1px solid rgba(226, 232, 240, 0.6)',
+          boxShadow: '-2px -2px 8px rgba(0, 0, 0, 0.05)'
+        }}
+      ></div>
+      
+      {/* Decorative top border */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
+      
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-2">
+        {/* Left Column - Product Categories */}
+        <div className="relative border-r border-slate-200/50 bg-white/80 backdrop-blur-sm">
+          {/* Premium Header with gradient */}
+          <div 
+            className="relative px-6 py-4 font-semibold text-sm text-white overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%)'
+            }}
+          >
+            {/* Animated background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0" style={{
+                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                backgroundSize: '24px 24px'
+              }}></div>
+            </div>
+            <div className="relative flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-white/20 backdrop-blur-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+              </div>
+              <span className="tracking-wide">Product Categories</span>
+            </div>
+          </div>
+          
+          {/* Categories List */}
+          <div className="divide-y divide-slate-100/80 max-h-[520px] overflow-y-auto custom-scrollbar">
+            {productCategories.map((category: ProductCategory, index: number) => (
+              <div
+                key={index}
+                onMouseEnter={() => category.subItems && setOpenCategory(category.title)}
+                className={`
+                  relative
+                  transition-all duration-200 ease-out
+                  ${openCategory === category.title 
+                    ? 'bg-gradient-to-r from-blue-50/80 to-indigo-50/40 shadow-sm' 
+                    : 'bg-white/50 hover:bg-gradient-to-r hover:from-slate-50/80 hover:to-blue-50/30'
+                  }
+                  group
+                `}
+              >
+                {/* Active indicator */}
+                {openCategory === category.title && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-600"></div>
+                )}
+                
+                <Link
+                  href={category.href}
+                  className="
+                    relative block px-6 py-3.5
+                    flex justify-between items-center
+                    transition-all duration-200
+                  "
+                  onClick={onClose}
                 >
-                  {category.subItems ? (
-                    <>
-                      <Link
-                        href={category.href}
-                        className="
-                          block py-3 px-5 text-gray-700 text-base font-medium
-                          bg-white rounded-lg border border-gray-100
-                          hover:text-blue-600 hover:border-blue-200
-                          hover:shadow-md transition-all duration-300
-                          flex justify-between items-center
-                        "
-                        onClick={onClose}
+                  <span 
+                    className={`
+                      font-semibold text-sm transition-colors duration-200
+                      ${openCategory === category.title 
+                        ? 'text-blue-700' 
+                        : 'text-slate-700 group-hover:text-blue-600'
+                      }
+                    `}
+                  >
+                    {category.title}
+                  </span>
+                  {category.subItems && (
+                    <div className={`
+                      p-1.5 rounded-md transition-all duration-200
+                      ${openCategory === category.title 
+                        ? 'bg-blue-100 text-blue-600 rotate-90' 
+                        : 'bg-slate-100 text-slate-400 group-hover:bg-blue-100 group-hover:text-blue-500'
+                      }
+                    `}>
+                      <svg 
+                        className="w-3.5 h-3.5 transition-transform duration-200" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
                       >
-                        <span>{category.title}</span>
-                        <svg 
-                          className={`w-4 h-4 transition-transform duration-200 ${openCategory === category.title ? 'rotate-180' : ''}`} 
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24" 
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </>
-                  ) : (
-                    <Link
-                      href={category.href}
-                      className="
-                        block py-3 px-5 text-gray-700 text-base font-medium
-                        bg-white rounded-lg border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-md transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {category.title}
-                    </Link>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   )}
-                </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Right Column - Sub Items */}
+        <div className="bg-gradient-to-b from-slate-50/40 to-white/60 min-h-[400px] max-h-[520px] overflow-y-auto custom-scrollbar">
+          {/* Premium Header */}
+          <div 
+            className="sticky top-0 z-10 px-6 py-4 font-semibold text-sm text-white overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%)'
+            }}
+          >
+            {/* Animated background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0" style={{
+                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                backgroundSize: '24px 24px'
+              }}></div>
+            </div>
+            <div className="relative flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-white/20 backdrop-blur-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <span className="tracking-wide truncate">
+                {selectedCategory ? `${selectedCategory.title} Products` : 'Select a Category'}
+              </span>
+            </div>
+          </div>
+          
+          {/* Sub Items List */}
+          {selectedCategory && selectedCategory.subItems ? (
+            <div className="divide-y divide-slate-100/60">
+              {selectedCategory.subItems.map((subItem: { title: string; href: string }, subIndex: number) => (
+                <Link
+                  key={subIndex}
+                  href={subItem.href}
+                  className="
+                    relative block px-6 py-3.5
+                    bg-white/40 hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-indigo-50/40
+                    transition-all duration-200 ease-out
+                    group
+                  "
+                  onClick={onClose}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`
+                      w-1.5 h-1.5 rounded-full transition-all duration-200
+                      ${openCategory === selectedCategory.title 
+                        ? 'bg-blue-400 group-hover:bg-blue-500 group-hover:scale-125' 
+                        : 'bg-slate-300 group-hover:bg-blue-400'
+                      }
+                    `}></div>
+                    <span className="
+                      text-sm font-medium text-slate-700
+                      group-hover:text-blue-700
+                      group-hover:translate-x-1
+                      transition-all duration-200
+                      inline-block
+                    ">
+                      {subItem.title}
+                    </span>
+                  </div>
+                </Link>
               ))}
             </div>
-            
-            {/* Right side panel for Microsoft Teams Rooms sub-items */}
-            {openCategory === "Microsoft Teams Rooms" && productCategories.find((cat: ProductCategory) => cat.title === "Microsoft Teams Rooms")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Microsoft Teams Rooms Solutions</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Microsoft Teams Rooms")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
+          ) : (
+            <div className="px-6 py-16 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200/50 mb-4">
+                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
               </div>
-            )}
-            
-            {/* Right side panel for Interactive Flat Panel sub-items */}
-            {openCategory === "Interactive Flat Panel" && productCategories.find((cat: ProductCategory) => cat.title === "Interactive Flat Panel")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Interactive Flat Panel Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Interactive Flat Panel")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
+              <p className="text-slate-500 text-sm font-medium">
+                {openCategory 
+                  ? 'No sub-items available for this category'
+                  : 'Hover over a category to see products'
+                }
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Premium Footer */}
+      <div 
+        className="
+          relative px-6 py-4
+          bg-gradient-to-r from-slate-50/80 via-white/60 to-slate-50/80
+          border-t border-slate-200/60
+          backdrop-blur-sm
+        "
+      >
+        <div className="flex justify-between items-center">
+          <div className="flex gap-8 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-blue-100/80">
+                <svg className="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
               </div>
-            )}
-            
-            {/* Right side panel for Commercial Display sub-items */}
-            {openCategory === "Commercial Display" && productCategories.find((cat: ProductCategory) => cat.title === "Commercial Display")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Commercial Display Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Commercial Display")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
+              <div>
+                <span className="text-slate-500 font-medium">Total Categories</span>
+                <span className="ml-2 text-slate-900 font-bold">{productCategories.length}</span>
               </div>
-            )}
-            
-            {/* Right side panel for LED Display sub-items */}
-            {openCategory === "LED Display" && productCategories.find((cat: ProductCategory) => cat.title === "LED Display")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">LED Display Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "LED Display")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
+            </div>
+            {selectedCategory && selectedCategory.subItems && (
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-indigo-100/80">
+                  <svg className="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
                 </div>
-              </div>
-            )}
-            
-            {/* Right side panel for Unified Communication sub-items */}
-            {openCategory === "Unified Communication" && productCategories.find((cat: ProductCategory) => cat.title === "Unified Communication")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Unified Communication Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Unified Communication")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Right side panel for Capture System sub-items */}
-            {openCategory === "Capture System" && productCategories.find((cat: ProductCategory) => cat.title === "Capture System")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Capture System Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Capture System")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Right side panel for Accessories sub-items */}
-            {openCategory === "Accessories" && productCategories.find((cat: ProductCategory) => cat.title === "Accessories")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Accessories Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Accessories")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Right side panel for Software sub-items */}
-            {openCategory === "Software" && productCategories.find((cat: ProductCategory) => cat.title === "Software")?.subItems && (
-              <div className="md:col-span-1 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Software Series</h3>
-                <div className="grid grid-cols-1 gap-2">
-                  {productCategories.find((cat: ProductCategory) => cat.title === "Software")?.subItems?.map((subItem: { title: string; href: string }, subIndex: number) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="
-                        block py-2 px-4 text-gray-600 text-sm
-                        bg-white rounded-md border border-gray-100
-                        hover:text-blue-600 hover:border-blue-200
-                        hover:shadow-sm transition-all duration-300
-                      "
-                      onClick={onClose}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
+                <div>
+                  <span className="text-slate-500 font-medium">Products</span>
+                  <span className="ml-2 text-slate-900 font-bold">{selectedCategory.subItems.length}</span>
                 </div>
               </div>
             )}
           </div>
+          <button
+            onClick={onClose}
+            className="
+              px-4 py-2
+              bg-gradient-to-r from-slate-700 to-slate-800
+              hover:from-slate-800 hover:to-slate-900
+              text-white text-xs font-semibold
+              rounded-lg
+              transition-all duration-200
+              flex items-center gap-2
+              shadow-lg hover:shadow-xl
+              hover:scale-105
+              active:scale-95
+            "
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Close
+          </button>
         </div>
       </div>
     </div>
