@@ -34,7 +34,6 @@ export default function Hero() {
 
   return (
     <section className="w-full h-screen relative overflow-hidden bg-black">
-
       {/* SLIDE TRACK */}
       <div
         className="absolute inset-0 flex transition-transform duration-[1500ms] ease-[cubic-bezier(0.65,0,0.35,1)]"
@@ -67,10 +66,10 @@ export default function Hero() {
               
               {/* Text content for slider1 (index 0) */}
               {i === 0 && (
-                <div className="absolute inset-0 flex flex-col items-start justify-start text-white text-left pl-55 pr-4 pt-40 z-10 hidden md:block">
-                  <h2 className="text-4xl md:text-2xl font-bold mb-2">Rizonn</h2>
-                  <h3 className="text-3xl md:text-xl font-semibold mb-8">Where Inspiration Moves Ahead.</h3>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Rizonn</h2>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl f mb-6 sm:mb-8">Where Inspiration Moves Ahead.</h3>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base">
                     Learn More
                   </button>
                 </div>
@@ -78,11 +77,11 @@ export default function Hero() {
               
               {/* Text content for slider2 (index 1) */}
               {i === 1 && (
-                <div className="absolute inset-0 flex flex-col items-start justify-start text-white text-left pl-25 pr-4 pt-40 z-10 hidden md:block">
-                  <h2 className="text-4xl md:text-2xl font-bold mb-2">Discover the Complete</h2>
-                  <h3 className="text-3xl md:text-xl font-semibold mb-2">Windows-Based Microsoft Teams</h3>
-                  <h3 className="text-3xl md:text-xl font-semibold mb-8">Rooms Ecosystem</h3>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Discover the Complete</h2>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl mb-2">Windows-Based Microsoft Teams</h3>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl  mb-6 sm:mb-8">Rooms Ecosystem</h3>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base">
                     Learn More
                   </button>
                 </div>
@@ -90,11 +89,11 @@ export default function Hero() {
               
               {/* Text content for slider3 (index 2) */}
               {i === 2 && (
-                <div className="absolute inset-0 flex flex-col items-start justify-start text-white text-left pl-55 pr-4 pt-40 z-10 hidden md:block">
-                  <h2 className="text-4xl md:text-2xl font-bold mb-2">Rizonn XBAR.</h2>
-                  <h3 className="text-3xl md:text-xl font-semibold mb-2">Rizonn FLEXIBILITY.</h3>
-                  <h3 className="text-3xl md:text-xl font-semibold mb-8">Windows. MDEP - Android. USB.</h3>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Rizonn XBAR.</h2>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl  mb-2">Rizonn FLEXIBILITY.</h3>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl  mb-6 sm:mb-8">Windows. MDEP - Android. USB.</h3>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base">
                     Learn More
                   </button>
                 </div>
@@ -105,8 +104,8 @@ export default function Hero() {
       </div>
 
       {/* MINIMALIST PROGRESS INDICATOR */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center">
-        <div className="flex items-center space-x-3">
+      <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 flex justify-center">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           {slides.map((_, i) => (
             <div key={i} className="flex flex-col items-center">
               <button
@@ -115,7 +114,7 @@ export default function Hero() {
                 aria-label={`Go to slide ${i + 1}`}
               >
                 {/* Outer circle */}
-                <div className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
+                <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 transition-all duration-300 ${
                   i === index 
                     ? 'border-cyan-400 bg-cyan-400/20' 
                     : 'border-white/50 hover:border-white/80'
@@ -123,7 +122,7 @@ export default function Hero() {
                 
                 {/* Progress ring for active slide */}
                 {i === index && (
-                  <svg className="absolute -top-0.5 -left-0.5 w-4 h-4" viewBox="0 0 20 20">
+                  <svg className="absolute -top-0.5 -left-0.5 w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 20 20">
                     <circle
                       cx="10"
                       cy="10"
@@ -147,12 +146,12 @@ export default function Hero() {
       {/* LEFT ARROW */}
       <button
         onClick={prev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full
+        className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full
                    bg-white/10 border border-white/20 backdrop-blur-md
                    hover:bg-white/20 transition text-white"
         aria-label="Previous slide"
       >
-        <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
@@ -160,16 +159,15 @@ export default function Hero() {
       {/* RIGHT ARROW */}
       <button
         onClick={next}
-        className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full
+        className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full
                    bg-white/10 border border-white/20 backdrop-blur-md
                    hover:bg-white/20 transition text-white"
         aria-label="Next slide"
       >
-        <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
       </button>
-
     </section>
   );
 }

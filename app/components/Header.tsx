@@ -15,7 +15,7 @@ export default function Header() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outsidek
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -60,7 +60,9 @@ export default function Header() {
 
   return (
     <header 
-      className={`fixed  left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/10 backdrop-blur-xl border-b border-white/20" : "bg-transparent"} ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-white/10 backdrop-blur-xl border-b border-white/20" : "bg-transparent"
+      } ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -72,7 +74,7 @@ export default function Header() {
               alt="Rizonn Logo" 
               width={180} 
               height={85} 
-              className="object-contain"
+              className="object-contain w-32 sm:w-40 md:w-44"
             />
           </div>
           
@@ -115,7 +117,7 @@ export default function Header() {
               <input 
                 type="text" 
                 placeholder="Search..." 
-                className="pl-8 pr-4 py-1 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black text-sm"
+                className="pl-8 pr-4 py-1 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black text-sm w-32 lg:w-40"
               />
               <svg 
                 className="w-4 h-4 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-800" 
@@ -241,7 +243,7 @@ export default function Header() {
               </div>
               <div className="flex items-center justify-between pt-2">
               
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors w-full">
                   Contact Sales
                 </button>
               </div>
