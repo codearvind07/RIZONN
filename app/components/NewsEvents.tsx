@@ -7,11 +7,16 @@ import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
 
+// Import images directly for better optimization
+import eventNews1 from "../../public/event_news1.jpeg";
+import eventNews2 from "../../public/event_news2.jpeg";
+import eventNews3 from "../../public/event_news3.png";
+
 const sliderImages = [
-  "/slide-1.jpg",
-  "/slide-2.jpg",
-  "/slider-3.jpg",
-  "/slider-4.jpg",
+  eventNews1,
+  eventNews2,
+  eventNews3,
+  eventNews1, // Using eventNews1 again as fourth image
 ];
 
 export default function NewsEvents() {
@@ -50,7 +55,7 @@ export default function NewsEvents() {
                   <SwiperSlide key={idx}>
                     <Image
                       src={img}
-                      alt="news slider"
+                      alt={`News and events slider image ${idx + 1}`}
                       fill
                       className="object-cover transition duration-700 hover:scale-110"
                     />
@@ -71,7 +76,7 @@ export default function NewsEvents() {
                   <SwiperSlide key={idx}>
                     <Image
                       src={img}
-                      alt="news slider"
+                      alt={`News and events slider image ${idx + 1}`}
                       fill
                       className="object-cover transition duration-700 hover:scale-110"
                     />
@@ -92,7 +97,7 @@ export default function NewsEvents() {
                   <SwiperSlide key={idx}>
                     <Image
                       src={img}
-                      alt="news slider"
+                      alt={`News and events slider image ${idx + 1}`}
                       fill
                       className="object-cover transition duration-700 hover:scale-110"
                     />

@@ -3,11 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import slider1 from "../../public/slide-1.jpg";
-import slider2 from "../../public/slide-2.jpg";
-import slider3 from "../../public/slider-3.jpeg";
-import slider4 from "../../public/slider-4.jpeg";
-import slider5 from "../../public/slider-5.png";
+import slider1 from "../../public/InteractiveFlat Pannel.jpeg";
+import slider2 from "../../public/Accessories.jpg";
+import slider3 from "../../public/Unified Communication.jpeg";
+import slider4 from "../../public/LED Display.jpeg";
+import slider5 from "../../public/Commercial Display.jpeg";
+import slider6 from "../../public/Software.jpeg";
+import slider7 from "../../public/Mounting Accessories.jpg";
+import slider8 from "../../public/Control Systems.jpg";
+
 
 const products = [
   { title: "Interactive Flat Panel", img: slider1, href: "/products", size: "md:col-span-2 md:row-span-2" },
@@ -15,9 +19,9 @@ const products = [
   { title: "Unified Communication", img: slider3, href: "/products", size: "md:row-span-2" },
   { title: "LED Display", img: slider4, href: "/products", size: "md:row-span-2" },
   { title: "Commercial Display", img: slider5, href: "/products", size: "md:row-span-1" },
-  { title: "Software", img: slider1, href: "/products", size: "md:col-span-2 md:row-span-1" },
-  { title: "Mounting Accessories", img: slider2, href: "/products", size: "md:col-span-2 md:row-span-1" },
-  { title: "Control Systems", img: slider3, href: "/products", size: "md:row-span-1" },
+  { title: "Software", img: slider6, href: "/products", size: "md:col-span-2 md:row-span-1" },
+  { title: "Mounting Accessories", img: slider7, href: "/products", size: "md:col-span-2 md:row-span-1" },
+  { title: "Control Systems", img: slider8, href: "/products", size: "md:row-span-1" },
 ];
 
 export default function ProductGrid() {

@@ -245,64 +245,7 @@ export default function ProductDropdown({ isOpen, onClose }: ProductDropdownProp
         </div>
       </div>
       
-      {/* Premium Footer */}
-      <div 
-        className="
-          relative px-6 py-4
-          bg-gradient-to-r from-slate-50/80 via-white/60 to-slate-50/80
-          border-t border-slate-200/60
-          backdrop-blur-sm
-        "
-      >
-        <div className="flex justify-between items-center">
-          <div className="flex gap-8 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-blue-100/80">
-                <svg className="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <div>
-                <span className="text-slate-500 font-medium">Total Categories</span>
-                <span className="ml-2 text-slate-900 font-bold">{productCategories.length}</span>
-              </div>
-            </div>
-            {selectedCategory && selectedCategory.subItems && (
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-indigo-100/80">
-                  <svg className="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="text-slate-500 font-medium">Products</span>
-                  <span className="ml-2 text-slate-900 font-bold">{selectedCategory.subItems.length}</span>
-                </div>
-              </div>
-            )}
-          </div>
-          <button
-            onClick={onClose}
-            className="
-              px-4 py-2
-              bg-gradient-to-r from-slate-700 to-slate-800
-              hover:from-slate-800 hover:to-slate-900
-              text-white text-xs font-semibold
-              rounded-lg
-              transition-all duration-200
-              flex items-center gap-2
-              shadow-lg hover:shadow-xl
-              hover:scale-105
-              active:scale-95
-            "
-          >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            Close
-          </button>
-        </div>
-      </div>
+
     </div>
   );
 }

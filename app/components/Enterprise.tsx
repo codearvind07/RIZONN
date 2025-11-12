@@ -2,36 +2,61 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-// ✅ SECTION CONTENT
-const sectionContent = {
-  Industry: {
+// Import images for each section
+import enterpriseImg from "../../public/slide-1.jpg";
+import educationImg from "../../public/slide-2.jpg";
+import teamsImg from "../../public/slider-3.jpeg";
+import zoomImg from "../../public/slider-4.jpeg";
+import allSolutionsImg from "../../public/slider-5.png";
+
+// ✅ CONTENT DATA
+const industryContent = {
+  Enterprise: {
     title: "Enterprise solutions",
-    subtitle: "Riozonn X Microsoft Teams",
-    description: "Do more for less and maximize efficiency with Riozonn XT series for Microsoft Teams Rooms.",
-    platform: "Microsoft Teams",
+    heading: "Rizonn X Enterprise",
+    description: "We offer easy-to-use, high-quality conferencing solutions for all room sizes. Transform your enterprise collaboration with our comprehensive suite of products.",
+    image: enterpriseImg,
   },
-  Platform: {
-    title: "Enterprise solutions",
-    subtitle: "Riozonn X Zoom",
-    description: "Seamless integration with Zoom for enhanced collaboration and productivity in every meeting space.",
-    platform: "Zoom",
-  },
-  AllSolutions: {
-    title: "Enterprise solutions",
-    subtitle: "Complete Solutions Suite",
-    description: "Comprehensive enterprise solutions designed to transform your workplace communication and collaboration.",
-    platform: "All Platforms",
+  Education: {
+    title: "Education solutions",
+    heading: "Rizonn X Education",
+    description: "Empower educational institutions with innovative collaboration tools designed for classrooms, lecture halls, and administrative spaces.",
+    image: educationImg,
   },
 };
 
-type SectionKey = keyof typeof sectionContent;
+const platformContent = {
+  "Microsoft Teams": {
+    title: "Microsoft Teams solutions",
+    heading: "Rizonn X Microsoft Teams",
+    description: "Do more for less and maximize efficiency with Rizonn XT series for Microsoft Teams Rooms.",
+    image: teamsImg,
+  },
+  Zoom: {
+    title: "Zoom solutions",
+    heading: "Rizonn X Zoom",
+    description: "Seamless integration with Zoom for enhanced collaboration and productivity in every meeting space.",
+    image: zoomImg,
+  },
+};
+
+// Add content for All Solutions
+const allSolutionsContent = {
+  title: "Complete Solutions Suite",
+  heading: "Complete Solutions Suite",
+  description: "Comprehensive enterprise solutions designed to transform your workplace communication and collaboration.",
+  image: allSolutionsImg,
+};
+
+type SectionKey = "Industry" | "Platform" | "AllSolutions";
 
 export default function EnterprisePage() {
-  const [activePlatform, setActivePlatform] = useState<"Microsoft Teams" | "Zoom">("Microsoft Teams");
   const [activeSection, setActiveSection] = useState<SectionKey>("Industry");
-
-  const currentContent = sectionContent[activeSection];
+  const [activeIndustry, setActiveIndustry] = useState<"Enterprise" | "Education">("Enterprise");
+  const [activePlatform, setActivePlatform] = useState<"Microsoft Teams" | "Zoom">("Microsoft Teams");
+  const [hoveredSection, setHoveredSection] = useState<SectionKey | null>(null);
 
   return (
     <div className="w-full min-h-screen bg-white flex pt-16">
@@ -59,15 +84,28 @@ export default function EnterprisePage() {
             (section) => (
               <button
                 key={section}
-                onClick={() => setActiveSection(section)}
+                onClick={() => {
+                  setActiveSection(section);
+                  // Reset tabs when switching sections
+                  if (section === "Industry") {
+                    setActiveIndustry("Enterprise");
+                  } else if (section === "Platform") {
+                    setActivePlatform("Microsoft Teams");
+                  }
+                }}
+                onMouseEnter={() => setHoveredSection(section)}
+                onMouseLeave={() => setHoveredSection(null)}
                 className={`
                   text-left text-base font-medium py-4 px-2
                   flex justify-between items-center
                   transition-all duration-200
+                  rounded-lg
                   ${
                     activeSection === section
-                      ? "text-blue-600"
-                      : "text-gray-700 hover:text-blue-500"
+                      ? "text-blue-600 bg-blue-50"
+                      : hoveredSection === section
+                      ? "text-blue-500 bg-blue-25"
+                      : "text-gray-700 hover:text-blue-500 hover:bg-gray-50"
                   }
                 `}
               >
@@ -108,304 +146,115 @@ export default function EnterprisePage() {
             }}
           ></div>
 
-          <div className="relative z-10">
-            {/* ✅ TABS */}
-            <div className="flex gap-8 mb-8">
-              {(["Microsoft Teams", "Zoom"] as const).map((platform) => (
+          <div className="relative z-10 flex flex-col md:flex-row gap-12">
+            {/* Text Content */}
+            <div className="md:w-1/2">
+              {/* ✅ TABS - Dynamic based on active section */}
+              <div className="flex gap-8 mb-8">
+                {activeSection === "Industry" ? (
+                  // Industry Tabs: Enterprise and Education
+                  (["Enterprise", "Education"] as const).map((industry) => (
+                    <button
+                      key={industry}
+                      onClick={() => setActiveIndustry(industry)}
+                      className={`
+                        text-base font-medium pb-2 transition-all
+                        ${
+                          activeIndustry === industry
+                            ? "text-white border-b-2 border-white"
+                            : "text-white/70 hover:text-white"
+                        }
+                      `}
+                    >
+                      {industry}
+                    </button>
+                  ))
+                ) : activeSection === "Platform" ? (
+                  // Platform Tabs: Microsoft Teams and Zoom
+                  (["Microsoft Teams", "Zoom"] as const).map((platform) => (
+                    <button
+                      key={platform}
+                      onClick={() => setActivePlatform(platform)}
+                      className={`
+                        text-base font-medium pb-2 transition-all
+                        ${
+                          activePlatform === platform
+                            ? "text-white border-b-2 border-white"
+                            : "text-white/70 hover:text-white"
+                        }
+                      `}
+                    >
+                      {platform}
+                    </button>
+                  ))
+                ) : null}
+              </div>
+
+              {/* ✅ MAIN HEADING */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                {activeSection === "Industry" 
+                  ? industryContent[activeIndustry].heading
+                  : activeSection === "Platform"
+                  ? platformContent[activePlatform].heading
+                  : allSolutionsContent.heading
+                }
+              </h1>
+
+              {/* ✅ DESCRIPTION */}
+              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl leading-relaxed">
+                {activeSection === "Industry" 
+                  ? industryContent[activeIndustry].description
+                  : activeSection === "Platform"
+                  ? platformContent[activePlatform].description
+                  : allSolutionsContent.description
+                }
+              </p>
+
+              {/* ✅ LEARN MORE BUTTON */}
+              <Link href="#">
                 <button
-                  key={platform}
-                  onClick={() => setActivePlatform(platform)}
-                  className={`
-                    text-base font-medium pb-2 transition-all
-                    ${
-                      activePlatform === platform
-                        ? "text-white border-b-2 border-white"
-                        : "text-white/70 hover:text-white"
-                    }
-                  `}
+                  className="
+                    px-6 py-3
+                    bg-blue-600 hover:bg-blue-700
+                    text-white font-medium
+                    rounded-md
+                    transition-all duration-200
+                    flex items-center gap-2
+                    shadow-lg hover:shadow-xl
+                    hover:scale-105
+                    active:scale-95
+                  "
                 >
-                  {platform}
+                  Learn More
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
-              ))}
+              </Link>
             </div>
 
-            {/* ✅ MAIN HEADING */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              {activePlatform === "Microsoft Teams" 
-                ? "MAXHUB X Microsoft Teams" 
-                : "MAXHUB X Zoom"
-              }
-            </h1>
-
-            {/* ✅ DESCRIPTION */}
-            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl leading-relaxed">
-              {activePlatform === "Microsoft Teams"
-                ? "Do more for less and maximize efficiency with MAXHUB XT series for Microsoft Teams Rooms."
-                : "Seamless integration with Zoom for enhanced collaboration and productivity in every meeting space."
-              }
-            </p>
-
-            {/* ✅ LEARN MORE BUTTON */}
-            <Link href="#">
-              <button
-                className="
-                  px-6 py-3
-                  bg-blue-600 hover:bg-blue-700
-                  text-white font-medium
-                  rounded-md
-                  transition-all duration-200
-                  flex items-center gap-2
-                  shadow-lg hover:shadow-xl
-                  hover:scale-105
-                  active:scale-95
-                "
-              >
-                Learn More
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </Link>
-          </div>
-        </div>
-
-        {/* ✅ BOTTOM SECTION - Light Grey/White with Product Showcase */}
-        <div 
-          className="
-            flex-1 px-8 md:px-16 py-16 md:py-20
-            bg-gradient-to-br from-gray-50 via-white to-gray-50
-            relative overflow-hidden
-          "
-          style={{
-            backgroundImage: `
-              repeating-linear-gradient(
-                135deg,
-                transparent,
-                transparent 50px,
-                rgba(0, 0, 0, 0.01) 50px,
-                rgba(0, 0, 0, 0.01) 100px
-              )
-            `
-          }}
-        >
-          <div className="relative z-10">
-            {/* ✅ PRODUCT SHOWCASE GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-              
-              {/* ✅ Product Card 1 - Large Wall Display (Main Feature) */}
-              <div className="lg:col-span-2 lg:row-span-2">
-                <div 
-                  className="
-                    h-full min-h-[500px] rounded-2xl
-                    bg-white
-                    p-8
-                    relative overflow-hidden
-                    group
-                  "
-                  style={{
-                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  {/* Multi-level platform base */}
-                  <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-gray-50 via-white to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent opacity-80"></div>
-                  
-                  {/* Display Screen */}
-                  <div className="relative h-full flex flex-col items-center justify-center space-y-4">
-                    {/* Main Display */}
-                    <div 
-                      className="
-                        w-full h-[380px] rounded-lg
-                        bg-gradient-to-br from-blue-100 to-blue-200
-                        relative overflow-hidden
-                        shadow-2xl
-                        border-4 border-gray-900
-                      "
-                    >
-                      {/* Screen Content - Video Conference UI */}
-                      <div className="absolute inset-0 p-4 grid grid-cols-2 gap-2">
-                        <div className="bg-white/90 rounded flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="w-12 h-12 bg-blue-600 rounded-full mx-auto mb-2"></div>
-                            <p className="text-xs text-gray-600">User 1</p>
-                          </div>
-                        </div>
-                        <div className="bg-white/90 rounded flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="w-12 h-12 bg-green-600 rounded-full mx-auto mb-2"></div>
-                            <p className="text-xs text-gray-600">User 2</p>
-                          </div>
-                        </div>
-                        <div className="bg-white/90 rounded flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="w-12 h-12 bg-purple-600 rounded-full mx-auto mb-2"></div>
-                            <p className="text-xs text-gray-600">User 3</p>
-                          </div>
-                        </div>
-                        <div className="bg-white/90 rounded flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="w-12 h-12 bg-orange-600 rounded-full mx-auto mb-2"></div>
-                            <p className="text-xs text-gray-600">User 4</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Display Stand/Base */}
-                    <div className="w-3/4 h-3 bg-gray-800 rounded-full"></div>
-                    <div className="w-1/2 h-2 bg-gray-700 rounded-full"></div>
-                  </div>
-                </div>
+            {/* Image Content */}
+            <div className="md:w-1/2 flex items-center justify-center">
+              <div className="relative w-full h-80 md:h-96 rounded-xl overflow-hidden shadow-2xl">
+                <Image
+                  src={
+                    activeSection === "Industry" 
+                      ? industryContent[activeIndustry].image
+                      : activeSection === "Platform"
+                      ? platformContent[activePlatform].image
+                      : allSolutionsContent.image
+                  }
+                  alt={
+                    activeSection === "Industry" 
+                      ? industryContent[activeIndustry].title
+                      : activeSection === "Platform"
+                      ? platformContent[activePlatform].title
+                      : allSolutionsContent.title
+                  }
+                  fill
+                  className="object-cover"
+                />
               </div>
-
-              {/* ✅ Product Card 2 - Soundbar with Camera */}
-              <div className="lg:col-span-1">
-                <div 
-                  className="
-                    h-full min-h-[240px] rounded-2xl
-                    bg-white
-                    p-6
-                    relative overflow-hidden
-                    group
-                  "
-                  style={{
-                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent opacity-80"></div>
-                  
-                  <div className="relative h-full flex flex-col items-center justify-center space-y-4">
-                    {/* Soundbar Device */}
-                    <div className="w-full h-20 bg-gray-900 rounded-lg shadow-xl flex items-center justify-center relative">
-                      {/* Camera module */}
-                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-16 h-8 bg-gray-800 rounded-full"></div>
-                      {/* Speaker grille */}
-                      <div className="w-3/4 h-1 bg-gray-700 rounded-full"></div>
-                    </div>
-                    
-                    {/* Platform base */}
-                    <div className="w-2/3 h-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ✅ Product Card 3 - Control Panel/Tablet */}
-              <div className="lg:col-span-1">
-                <div 
-                  className="
-                    h-full min-h-[240px] rounded-2xl
-                    bg-white
-                    p-6
-                    relative overflow-hidden
-                    group
-                  "
-                  style={{
-                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent opacity-80"></div>
-                  
-                  <div className="relative h-full flex flex-col items-center justify-center space-y-4">
-                    {/* Tablet/Control Panel */}
-                    <div 
-                      className="
-                        w-32 h-40 bg-gray-900 rounded-xl
-                        shadow-xl
-                        border-2 border-gray-700
-                        flex items-center justify-center
-                        transform rotate-[-8deg]
-                        group-hover:rotate-[-5deg] transition-transform duration-300
-                      "
-                    >
-                      <div className="w-full h-full p-3">
-                        <div className="w-full h-2 bg-purple-600 rounded mb-2"></div>
-                        <div className="w-3/4 h-2 bg-white/20 rounded mb-2"></div>
-                        <div className="w-full h-2 bg-white/20 rounded mb-2"></div>
-                        <div className="w-2/3 h-2 bg-white/20 rounded"></div>
-                      </div>
-                    </div>
-                    
-                    {/* Platform base */}
-                    <div className="w-2/3 h-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ✅ Product Card 4 - PTZ Camera */}
-              <div className="lg:col-span-1">
-                <div 
-                  className="
-                    h-full min-h-[240px] rounded-2xl
-                    bg-white
-                    p-6
-                    relative overflow-hidden
-                    group
-                  "
-                  style={{
-                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent opacity-80"></div>
-                  
-                  <div className="relative h-full flex flex-col items-center justify-center space-y-4">
-                    {/* Camera Sphere */}
-                    <div className="relative">
-                      <div className="w-20 h-20 bg-gray-900 rounded-full shadow-xl flex items-center justify-center">
-                        <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center">
-                          <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center">
-                            <div className="w-8 h-8 bg-blue-600 rounded-full"></div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Camera mount */}
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-4 bg-gray-800 rounded-full"></div>
-                    </div>
-                    
-                    {/* Platform base */}
-                    <div className="w-2/3 h-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ✅ Product Card 5 - Hub/Mini PC */}
-              <div className="lg:col-span-1">
-                <div 
-                  className="
-                    h-full min-h-[240px] rounded-2xl
-                    bg-white
-                    p-6
-                    relative overflow-hidden
-                    group
-                  "
-                  style={{
-                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent opacity-80"></div>
-                  
-                  <div className="relative h-full flex flex-col items-center justify-center space-y-4">
-                    {/* Hub Device */}
-                    <div className="w-full h-24 bg-gray-900 rounded-lg shadow-xl flex items-center justify-center relative">
-                      {/* Status LED */}
-                      <div className="absolute top-2 right-2 w-2 h-2 bg-green-500 rounded-full"></div>
-                      {/* Ventilation */}
-                      <div className="flex gap-1">
-                        {[...Array(8)].map((_, i) => (
-                          <div key={i} className="w-1 h-8 bg-gray-700 rounded"></div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* Platform base */}
-                    <div className="w-2/3 h-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
