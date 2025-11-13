@@ -1,3 +1,22 @@
+/* Custom Fonts - Must be before Tailwind */
+@font-face {
+  font-family: 'Nexaregular';
+  src: url('/fonts/Nexa-Trial-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  fallback: system-ui, -apple-system, sans-serif;
+}
+
+@font-face {
+  font-family: 'Nexabold';
+  src: url('/fonts/Nexa-Trial-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  fallback: system-ui, -apple-system, sans-serif;
+}
+
 @import "tailwindcss";
 
 :root {
@@ -8,8 +27,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter-bold), var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +39,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: 'Nexaregular', system-ui, -apple-system, sans-serif;
 }
 
 /* Smooth scrolling for the entire page */

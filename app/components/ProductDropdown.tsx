@@ -11,6 +11,8 @@ interface ProductDropdownProps {
 
 export default function ProductDropdown({ isOpen, onClose }: ProductDropdownProps) {
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [openSubItem, setOpenSubItem] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   // ✅ Escape key closes dropdown
   useEffect(() => {
@@ -27,225 +29,146 @@ export default function ProductDropdown({ isOpen, onClose }: ProductDropdownProp
     };
   }, [isOpen, onClose]);
 
+  // mount animation: show translate from header when opened
+  useEffect(() => {
+    if (!isOpen) {
+      setMounted(false);
+      return;
+    }
+    // small timeout to allow mount then animate
+    const id = setTimeout(() => setMounted(true), 10);
+    return () => clearTimeout(id);
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  const selectedCategory = openCategory 
-    ? productCategories.find((cat: ProductCategory) => cat.title === openCategory)
-    : null;
+  const featuredCategory = productCategories.find((c) => c.title === "Featured") || productCategories[0];
+  const activeCategory = productCategories.find((c) => c.title === openCategory);
+  const teamsCategory = productCategories.find((c) => c.title === "Microsoft Teams Rooms");
+  const displayCategory = activeCategory || teamsCategory;
 
   return (
-    <div
-      className="
-        absolute top-full left-0 mt-3 z-[9999]
-        w-[960px] max-w-[calc(100vw-2rem)]
-        bg-gradient-to-br from-white via-white to-slate-50/50
-        rounded-2xl
-        overflow-hidden
-        transition-all duration-300 ease-out
-        backdrop-blur-xl
-        border border-slate-200/60
-      "
-      style={{
-        boxShadow: `
-          0 25px 50px -12px rgba(0, 0, 0, 0.15),
-          0 0 0 1px rgba(255, 255, 255, 0.8),
-          inset 0 1px 0 0 rgba(255, 255, 255, 0.9)
-        `,
-        background: 'linear-gradient(to bottom right, #ffffff, #ffffff, #f8fafc)'
-      }}
-      onMouseLeave={() => setOpenCategory(null)}
-      onClick={(e) => e.stopPropagation()}
-    >
-      {/* Premium Arrow pointing up */}
-      <div 
-        className="absolute -top-2 left-8 w-4 h-4 transform rotate-45 z-10"
-        style={{
-          background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
-          borderLeft: '1px solid rgba(226, 232, 240, 0.6)',
-          borderTop: '1px solid rgba(226, 232, 240, 0.6)',
-          boxShadow: '-2px -2px 8px rgba(0, 0, 0, 0.05)'
-        }}
-      ></div>
-      
-      {/* Decorative top border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
-      
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-2">
-        {/* Left Column - Product Categories */}
-        <div className="relative border-r border-slate-200/50 bg-white/80 backdrop-blur-sm">
-          {/* Premium Header with gradient */}
-          <div 
-            className="relative px-6 py-4 font-semibold text-sm text-white overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%)'
-            }}
-          >
-            {/* Animated background pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-                backgroundSize: '24px 24px'
-              }}></div>
-            </div>
-            <div className="relative flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-white/20 backdrop-blur-sm">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-              </svg>
-              </div>
-              <span className="tracking-wide">Product Categories</span>
-            </div>
-          </div>
-          
-          {/* Categories List */}
-          <div className="divide-y divide-slate-100/80 max-h-[520px] overflow-y-auto custom-scrollbar">
-            {productCategories.map((category: ProductCategory, index: number) => (
-              <div
-                key={index}
-                onMouseEnter={() => category.subItems && setOpenCategory(category.title)}
-                className={`
-                  relative
-                  transition-all duration-200 ease-out
-                  ${openCategory === category.title 
-                    ? 'bg-gradient-to-r from-blue-50/80 to-indigo-50/40 shadow-sm' 
-                    : 'bg-white/50 hover:bg-gradient-to-r hover:from-slate-50/80 hover:to-blue-50/30'
-                  }
-                  group
-                `}
-              >
-                {/* Active indicator */}
-                {openCategory === category.title && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-600"></div>
-                )}
-                
-                <Link
-                  href={category.href}
-                  className="
-                    relative block px-6 py-3.5
-                    flex justify-between items-center
-                    transition-all duration-200
-                  "
-                  onClick={onClose}
-                >
-                  <span 
-                    className={`
-                      font-semibold text-sm transition-colors duration-200
-                      ${openCategory === category.title 
-                        ? 'text-blue-700' 
-                        : 'text-slate-700 group-hover:text-blue-600'
-                      }
-                    `}
-                  >
-                    {category.title}
-                  </span>
-                  {category.subItems && (
-                    <div className={`
-                      p-1.5 rounded-md transition-all duration-200
-                      ${openCategory === category.title 
-                        ? 'bg-blue-100 text-blue-600 rotate-90' 
-                        : 'bg-slate-100 text-slate-400 group-hover:bg-blue-100 group-hover:text-blue-500'
-                      }
-                    `}>
-                      <svg 
-                        className="w-3.5 h-3.5 transition-transform duration-200" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                      </svg>
+    <div className="fixed top-16 left-0 right-0 z-[9999] bg-black/20 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className={`absolute top-0 left-0 right-0 max-h-[calc(100vh-4rem)] bg-white shadow-2xl border-t border-gray-200 rounded-b-2xl transform transition-all duration-200 ease-out ${mounted ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-[220px_360px_260px_1fr] gap-6 items-start">
+            {/* Left column: Featured + Products list */}
+            <div className="">
+              <div className="rounded-t-lg overflow-hidden">
+                <div className="bg-gray-100 px-6 py-6">
+                  <h4 className="text-2xl font-semibold text-gray-800">Featured</h4>
+                </div>
+                <div className="bg-white">
+                  {/* Microsoft Teams Rooms as highlighted featured item */}
+                  {teamsCategory && (
+                    <div
+                      onMouseEnter={() => setOpenCategory(teamsCategory.title)}
+                      onMouseLeave={() => setOpenCategory(null)}
+                    >
+                      
+                        <Link
+                          href={teamsCategory.href}
+                          className="flex items-center justify-between py-3 px-6 text-blue-600 border-t border-gray-200 hover:bg-gray-50 hover:text-blue-700"
+                          onClick={onClose}
+                        >
+                        <span className="font-medium">{teamsCategory.title}</span>
+                        <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
                     </div>
                   )}
-                </Link>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Right Column - Sub Items */}
-        <div className="bg-gradient-to-b from-slate-50/40 to-white/60 min-h-[400px] max-h-[520px] overflow-y-auto custom-scrollbar">
-          {/* Premium Header */}
-          <div 
-            className="sticky top-0 z-10 px-6 py-4 font-semibold text-sm text-white overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%)'
-            }}
-          >
-            {/* Animated background pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-                backgroundSize: '24px 24px'
-              }}></div>
-            </div>
-            <div className="relative flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-white/20 backdrop-blur-sm">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-              </div>
-              <span className="tracking-wide truncate">
-                {selectedCategory ? `${selectedCategory.title} Products` : 'Select a Category'}
-              </span>
-            </div>
-          </div>
-          
-          {/* Sub Items List */}
-          {selectedCategory && selectedCategory.subItems ? (
-            <div className="divide-y divide-slate-100/60">
-              {selectedCategory.subItems.map((subItem: { title: string; href: string }, subIndex: number) => (
-                <Link
-                  key={subIndex}
-                  href={subItem.href}
-                  className="
-                    relative block px-6 py-3.5
-                    bg-white/40 hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-indigo-50/40
-                    transition-all duration-200 ease-out
-                    group
-                  "
-                  onClick={onClose}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`
-                      w-1.5 h-1.5 rounded-full transition-all duration-200
-                      ${openCategory === selectedCategory.title 
-                        ? 'bg-blue-400 group-hover:bg-blue-500 group-hover:scale-125' 
-                        : 'bg-slate-300 group-hover:bg-blue-400'
-                      }
-                    `}></div>
-                    <span className="
-                      text-sm font-medium text-slate-700
-                      group-hover:text-blue-700
-                      group-hover:translate-x-1
-                      transition-all duration-200
-                      inline-block
-                    ">
-                      {subItem.title}
-                    </span>
+
+              <div className="mt-4 bg-gray-50 rounded-b-lg border border-gray-100 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h4 className="text-xl font-medium text-gray-700">Products</h4>
+                </div>
+                <div className="max-h-[52vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+                  <div className="space-y-2 px-4 py-4">
+                    {[
+                      "Interactive Flat Panel",
+                      "Commercial Display",
+                      "LED Display",
+                      "Unified Communication",
+                      "Capture System",
+                      "Accessories",
+                      "Software",
+                    ].map((title, idx) => {
+                      const category = productCategories.find((c) => c.title === title);
+                      if (!category) return null;
+                      return (
+                        <div key={idx} onMouseEnter={() => category.subItems && setOpenCategory(category.title)} onMouseLeave={() => category.subItems && setOpenCategory(null)}>
+                          <Link href={category.href} className="flex items-center justify-between py-3 px-3 text-base text-gray-700 hover:bg-gray-100 rounded" onClick={onClose}>
+                            <span>{category.title}</span>
+                            {category.subItems && <span className="text-gray-400">›</span>}
+                          </Link>
+                        </div>
+                      );
+                    })}
                   </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="px-6 py-16 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200/50 mb-4">
-                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+                </div>
               </div>
-              <p className="text-slate-500 text-sm font-medium">
-                {openCategory 
-                  ? 'No sub-items available for this category'
-                  : 'Hover over a category to see products'
-                }
-              </p>
             </div>
-          )}
+
+            {/* Second column: series/subitems */}
+            <div className="border-l border-r border-gray-200 bg-white rounded-lg overflow-hidden relative">
+              {displayCategory ? (
+                <>
+                  <div className="px-6 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <Link href={displayCategory.href} className="text-blue-600 text-base font-medium" onClick={onClose}>
+                      {displayCategory.title}
+                    </Link>
+                    <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </div>
+                  <div className="max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 px-4 py-4">
+                    <div className="space-y-3">
+                      {displayCategory.subItems?.map((subItem, i) => (
+                        <div key={i} onMouseEnter={() => setOpenSubItem(subItem.title)} onMouseLeave={() => setOpenSubItem(null)}>
+                          <Link href={subItem.href} className="flex items-center justify-between py-3 px-3 text-sm text-gray-700 hover:bg-gray-50 rounded" onClick={onClose}>
+                            <span>{subItem.title}</span>
+                            <span className="text-gray-300">›</span>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="p-6 text-gray-500">No series available</div>
+              )}
+            </div>
+
+            {/* Third column: deeper items for hovered series */}
+            <div className="bg-white rounded-lg p-6">
+              {openSubItem ? (
+                <>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">{openSubItem}</h3>
+                  <div className="space-y-3">
+                    <Link href="#" className="block text-gray-600 hover:text-blue-600">View all {openSubItem} models</Link>
+                  </div>
+                </>
+              ) : (
+                <div className="text-gray-500">Hover a series to see models here.</div>
+              )}
+            </div>
+
+            {/* Rightmost image */}
+            <div className="flex items-start justify-center">
+              <div className="w-full max-w-sm bg-gray-50 rounded-lg p-6 border border-gray-100 shadow-sm">
+                <div className="bg-white rounded-md p-4">
+                  <img src="/slide-1.jpg" alt="promo" className="w-full h-44 object-contain" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
-
     </div>
+
   );
 }
