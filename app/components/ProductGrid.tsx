@@ -1,92 +1,93 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
+import React from "react";
 
+// ✅ Import your real local images
 import slider1 from "../../public/InteractiveFlat Pannel.jpeg";
 import slider2 from "../../public/Accessories.jpg";
 import slider3 from "../../public/Unified Communication.jpeg";
 import slider4 from "../../public/LED Display.jpeg";
 import slider5 from "../../public/Commercial Display.jpeg";
 import slider6 from "../../public/Software.jpeg";
-import slider7 from "../../public/Mounting Accessories.jpg";
-import slider8 from "../../public/Control Systems.jpg";
 
-
+// ✅ Product details
 const products = [
-  { title: "Interactive Flat Panel", img: slider1, href: "/products", size: "md:col-span-2 md:row-span-2" },
-  { title: "Accessories", img: slider2, href: "/products", size: "md:row-span-2" },
-  { title: "Unified Communication", img: slider3, href: "/products", size: "md:row-span-2" },
-  { title: "LED Display", img: slider4, href: "/products", size: "md:row-span-2" },
-  { title: "Commercial Display", img: slider5, href: "/products", size: "md:row-span-1" },
-  { title: "Software", img: slider6, href: "/products", size: "md:col-span-2 md:row-span-1" },
-  { title: "Mounting Accessories", img: slider7, href: "/products", size: "md:col-span-2 md:row-span-1" },
-  { title: "Control Systems", img: slider8, href: "/products", size: "md:row-span-1" },
+  {
+    title: "Interactive Flat Panel",
+    img: slider1,
+    href: "/products",
+    gridClasses: "col-span-2 row-span-2",
+  },
+  {
+    title: "Accessories",
+    img: slider2,
+    href: "/products",
+    gridClasses: "col-span-1 row-span-2",
+  },
+  {
+    title: "Unified Communication",
+    img: slider3,
+    href: "/products",
+    gridClasses: "col-span-1 row-span-2",
+  },
+  {
+    title: "LED Display",
+    img: slider4,
+    href: "/products",
+    gridClasses: "col-span-2 row-span-2",
+  },
+  {
+    title: "Commercial Display",
+    img: slider5,
+    href: "/products",
+    gridClasses: "col-span-2 row-span-1",
+  },
+  {
+    title: "Software",
+    img: slider6,
+    href: "/products",
+    gridClasses: "col-span-2 row-span-1",
+  },
 ];
 
 export default function ProductGrid() {
   return (
-    <section className="w-full py-10 bg-white">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4">
-
-        {/* ✅ Responsive Grid Optimized for Mobile + Desktop */}
+    <section className="w-full bg-[#f5f6f8] py-12 md:py-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        {/* ✅ Responsive Product Grid */}
         <div
           className="
-            grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 
-            gap-3 sm:gap-4
-            auto-rows-[160px] sm:auto-rows-[200px] md:auto-rows-[220px] lg:auto-rows-[260px]
+            grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6
+            auto-rows-[180px] md:auto-rows-[200px] lg:auto-rows-[240px]
           "
         >
-          {products.map((p, index) => (
-            <Link
-              key={index}
+          {products.map((p, i) => (
+            <a
+              key={i}
               href={p.href}
               className={`
-                group relative overflow-hidden rounded-xl bg-black shadow-md sm:shadow-lg 
-                ${p.size}
-                transition-all duration-300
-                active:scale-[0.97]   /* ✅ mobile tap feedback */
+                group relative overflow-hidden rounded-2xl bg-white 
+                border border-gray-200 shadow-sm 
+                transition-transform duration-500 hover:scale-[1.01] hover:shadow-lg
+                ${p.gridClasses}
               `}
             >
-
-              {/* ✅ BASE IMAGE */}
-              <Image
-                src={p.img}
+              {/* ✅ Local image rendering */}
+              <img
+                src={p.img.src} // 👈 Important: .src to get image URL from imported file
                 alt={p.title}
-                fill
-                className="
-                  object-cover brightness-[0.78]
-                  transition-all duration-700
-                  group-hover:brightness-110 group-hover:scale-105
-                "
+                className="object-cover object-center transition-transform duration-700 group-hover:scale-105 w-full h-full"
+                onError={(e) => {
+                  e.currentTarget.src =
+                    "https://placehold.co/400x400/FEE2E2/B91C1C?text=Image+Not+Found";
+                }}
               />
 
-              {/* ✅ MASK REVEAL (Desktop only) */}
-              <div
-                className="
-                  absolute inset-0 hidden md:block
-                  bg-gradient-to-r from-white/0 via-white/40 to-white/0
-                  translate-x-[-120%]
-                  group-hover:translate-x-[150%]
-                  transition-all duration-[1100ms] ease-out
-                "
-              />
-
-              {/* ✅ LIGHT OVERLAY */}
-              <div
-                className="
-                  absolute inset-0 opacity-0 group-hover:opacity-[.15]
-                  bg-white transition-all duration-700 pointer-events-none
-                "
-              />
-
-              {/* ✅ TITLE */}
-              <div className="absolute bottom-3 left-3 text-white z-10">
-                <h4 className="text-[12px] sm:text-[13px] md:text-[14px] font-medium drop-shadow-xl">
-                  {p.title} →
-                </h4>
+              {/* ✅ Top-right label */}
+              <div className="absolute top-4 right-5 text-sm font-medium text-gray-800 z-10 bg-white/50 backdrop-blur-sm px-2 py-1 rounded-md">
+                {p.title} <span className="text-gray-500 ml-[2px]">›</span>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

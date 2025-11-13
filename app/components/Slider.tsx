@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import slider1 from "../../public/slider-4.jpeg";
-import slider2 from "../../public/slider-5.png";
-import slider3 from "../../public/slider-3.jpeg";
+import slider1 from "../../public/s1.jpeg";
+import slider2 from "../../public/s2.jpeg";
+import slider3 from "../../public/s3.jpeg";
+import slider4 from "../../public/s4.jpeg";
 
-const slides = [slider1, slider2, slider3];
+const slides = [slider1, slider2, slider3, slider4];
 
 export default function Slider() {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -43,13 +43,13 @@ export default function AboutSection() {
           href="/about"
           className="mt-8 inline-block bg-blue-600 hover:bg-blue-700 transition-all px-8 py-3 rounded-lg text-white font-medium shadow-lg"
         >
-          Learn More →
+          Learn More 
         </Link>
 
         {/* Stats Section */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
           <div>
-            <p className="text-4xl font-bold">6500+</p>
+            <p className="text-4xl font-bold">6500 </p>
             <p className="text-gray-400 mt-2 text-sm tracking-wide">
               Total Employees
             </p>
@@ -61,13 +61,13 @@ export default function AboutSection() {
             </p>
           </div>
           <div>
-            <p className="text-4xl font-bold">60%</p>
+            <p className="text-4xl font-bold">60</p>
             <p className="text-gray-400 mt-2 text-sm tracking-wide">
               R&D Engineer
             </p>
           </div>
           <div>
-            <p className="text-4xl font-bold">US$ 3B</p>
+            <p className="text-4xl font-bold">US 3B</p>
             <p className="text-gray-400 mt-2 text-sm tracking-wide">
               Revenue
             </p>

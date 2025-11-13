@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import slider1 from "../../public/slider-4.jpeg";
 import slider2 from "../../public/slider-3.jpeg";
-// import slider3 from "../../public/slide-1.jpg";
 import slider4 from "../../public/slider.jpeg";
 import slider5 from "../../public/slider11.png";
 
@@ -39,8 +38,8 @@ export default function Hero() {
     <section className="w-full h-screen relative overflow-hidden bg-black">
       {/* SLIDE TRACK */}
       <div
-        className="absolute inset-0 flex transition-transform duration-[1500ms] ease-[cubic-bezier(0.65,0,0.35,1)]"
-        style={{ transform: `translateX(-${index * 100}%)` }}
+        className="absolute inset-0 flex transition-transform duration-[2000ms] ease-[cubic-bezier(0.22,0.1,0.08,1)]"
+        style={{ transform: `translate3d(-${index * 100}%,0,0)`, willChange: 'transform' }}
       >
         {slides.map((img, i) => (
           <div key={i} className="relative w-full h-screen flex-shrink-0 overflow-hidden">
@@ -57,8 +56,8 @@ export default function Hero() {
 
             {/* PARALLAX FOREGROUND IMAGE */}
             <div
-              className="absolute inset-0 transition-transform duration-[1500ms]"
-              style={{ transform: index === i ? "scale(1)" : "scale(1.1)" }}
+              className="absolute inset-0 transition-transform duration-[2000ms] ease-[cubic-bezier(0.22,0.1,0.08,1)]"
+              style={{ transform: index === i ? 'scale(1)' : 'scale(1.05)', willChange: 'transform' }}
             >
               <Image
                 src={img}
@@ -100,9 +99,6 @@ export default function Hero() {
                   </button>
                 </div>
               )}
-              
-              {/* slide 3 has no text overlay (image-only) */}
-
               {/* Text content for slider4 (index 2) */}
               {i === 2 && (
                 <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">

@@ -1,114 +1,126 @@
 "use client";
 
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 
-import "swiper/css";
-
-// Import images directly for better optimization
+// ✅ Local images
 import eventNews1 from "../../public/event_news1.jpeg";
 import eventNews2 from "../../public/event_news2.jpeg";
 import eventNews3 from "../../public/event_news3.png";
 
-const sliderImages = [
-  eventNews1,
-  eventNews2,
-  eventNews3,
-  eventNews1, // Using eventNews1 again as fourth image
-];
+const slides = [eventNews1, eventNews2, eventNews3];
 
-export default function NewsEvents() {
+export default function NewsEventsSlider() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const duration = 4000; // 4 seconds per slide
+
+  // Animate progress
+  useEffect(() => {
+    setProgress(0);
+    const start = Date.now();
+    let frameId: number;
+
+    const animate = () => {
+      const elapsed = Date.now() - start;
+      const percent = Math.min((elapsed / duration) * 100, 100);
+      setProgress(percent);
+
+      if (percent < 100) {
+        frameId = requestAnimationFrame(animate);
+      } else {
+        setCurrentIndex((prev) => (prev + 1) % slides.length);
+      }
+    };
+
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [currentIndex]);
+
+  const prevSlide = () =>
+    setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  const nextSlide = () =>
+    setCurrentIndex((prev) => (prev + 1) % slides.length);
+
   return (
-    <section className="w-full py-16 bg-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-
-          {/* LEFT CARD */}
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-xl p-10 flex flex-col justify-center text-white">
-            <h3 className="text-3xl font-bold mb-4">News & Events</h3>
-            <p className="text-white/90 leading-relaxed mb-6 text-lg">
-              Stay updated with our latest innovations, product launches, and industry events.
-            </p>
-
-            <Link
-              href="/news"
-              className="inline-block bg-white text-blue-700 font-medium rounded-lg px-6 py-3 hover:bg-gray-100 transition-all"
-            >
-              Explore More →
-            </Link>
-          </div>
-
-          {/* RIGHT MOSAIC SLIDER SECTION */}
-          <div className="lg:col-span-2 grid grid-cols-2 grid-rows-2 gap-6">
-
-            {/* Slider 1 (Large) */}
-            <div className="row-span-2 h-[400px] rounded-2xl overflow-hidden shadow-xl">
-              <Swiper
-                modules={[Autoplay]}
-                autoplay={{ delay: 2500 }}
-                loop
-                className="w-full h-full"
-              >
-                {sliderImages.map((img, idx) => (
-                  <SwiperSlide key={idx}>
-                    <Image
-                      src={img}
-                      alt={`News and events slider image ${idx + 1}`}
-                      fill
-                      className="object-cover transition duration-700 hover:scale-110"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-
-            {/* Slider 2 */}
-            <div className="h-[190px] rounded-2xl overflow-hidden shadow-lg">
-              <Swiper
-                modules={[Autoplay]}
-                autoplay={{ delay: 3000 }}
-                loop
-                className="w-full h-full"
-              >
-                {sliderImages.map((img, idx) => (
-                  <SwiperSlide key={idx}>
-                    <Image
-                      src={img}
-                      alt={`News and events slider image ${idx + 1}`}
-                      fill
-                      className="object-cover transition duration-700 hover:scale-110"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-
-            {/* Slider 3 */}
-            <div className="h-[190px] rounded-2xl overflow-hidden shadow-lg">
-              <Swiper
-                modules={[Autoplay]}
-                autoplay={{ delay: 2800 }}
-                loop
-                className="w-full h-full"
-              >
-                {sliderImages.map((img, idx) => (
-                  <SwiperSlide key={idx}>
-                    <Image
-                      src={img}
-                      alt={`News and events slider image ${idx + 1}`}
-                      fill
-                      className="object-cover transition duration-700 hover:scale-110"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-
-          </div>
+    <section className="relative w-full h-screen overflow-hidden">
+      {/* ✅ Slides */}
+      {slides.map((img, i) => (
+        <div
+          key={i}
+          className={`absolute inset-0 transition-opacity duration-[1200ms] ${
+            i === currentIndex ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <Image
+            src={img}
+            alt={`News & Events Slide ${i + 1}`}
+            fill
+            priority={i === 0}
+            className="object-cover object-center"
+          />
         </div>
+      ))}
+
+      {/* ✅ Short Dotted Progress Bar */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 items-center justify-center">
+        {slides.map((_, i) => (
+          <div key={i} className="flex items-center justify-center">
+            <div className="flex gap-2">
+              {[...Array(6)].map((_, dotIndex) => {
+                const dotThreshold = (dotIndex + 1) * (100 / 6);
+                const isFilled =
+                  i < currentIndex ||
+                  (i === currentIndex && progress >= dotThreshold);
+
+                return (
+                  <span
+                    key={dotIndex}
+                    className={`block w-[6px] h-[6px] rounded-full transition-all duration-300 ${
+                      isFilled
+                        ? "bg-white scale-110"
+                        : "bg-white/25 hover:bg-white/40"
+                    }`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
+
+      {/* ✅ Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        aria-label="Previous slide"
+        className="absolute left-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <button
+        onClick={nextSlide}
+        aria-label="Next slide"
+        className="absolute right-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </section>
   );
 }

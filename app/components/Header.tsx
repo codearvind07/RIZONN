@@ -69,7 +69,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Image
-              src="/rizoonlogo.png"
+              src="/newlogowhite.png"
               alt="Rizonn Logo"
               width={180}
               height={85}
@@ -124,13 +124,31 @@ export default function Header() {
                   placeholder="Search..."
                   className="bg-transparent focus:outline-none w-20 text-sm"
                 />
-              </div>
-               <button className="flex items-center gap-2 text-white text-sm hover:text-blue-300 cursor-pointer">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a10 10 0 100 20 10 10 0 000-20zM2 12h20" />
-                </svg>
-                <span>EN</span>
-              </button>
+             </div>
+<button className="flex items-center gap-2 text-white text-sm hover:text-blue-300 cursor-pointer">
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10
+         10-4.477 10-10S17.523 2 12 2z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"
+    />
+  </svg>
+  <span>EN</span>
+</button>
+
 
               <button className="inline-flex items-center gap-3 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-nexa-bold cursor-pointer">
                 <span>Contact Sales</span>
