@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import slider1 from "../../public/slider-4.jpeg";
 import slider2 from "../../public/slider-3.jpeg";
-import slider3 from "../../public/slide-1.jpg";
+// import slider3 from "../../public/slide-1.jpg";
 import slider4 from "../../public/slider.jpeg";
 import slider5 from "../../public/slider11.png";
 
 
-const slides = [slider1, slider2, slider3, slider4, slider5];
+const slides = [slider1, slider2,  slider4, slider5];
 
 export default function Hero() {
   const [index, setIndex] = useState(0);
@@ -78,8 +78,8 @@ export default function Hero() {
                 </div>
               )}
 
-              {/* Text content for slider5 (index 4) */}
-              {i === 4 && (
+              {/* Text content for slider5 (index 3) */}
+              {i === 3 && (
                 <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">PARTNER ALLIANCE</h2>
                   <h3 className="text-xl sm:text-2xl md:text-3xl mb-6">Joint forces to create exceptional <br /> technology solutions.</h3>
@@ -101,22 +101,12 @@ export default function Hero() {
                 </div>
               )}
               
-              {/* Text content for slider3 (index 2) */}
+              {/* slide 3 has no text overlay (image-only) */}
+
+              {/* Text content for slider4 (index 2) */}
               {i === 2 && (
                 <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Rizonn XBAR.</h2>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl  mb-2">Rizonn FLEXIBILITY.</h3>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl  mb-6 sm:mb-8">Windows. MDEP - Android. USB.</h3>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base">
-                    Learn More
-                  </button>
-                </div>
-              )}
-
-              {/* Text content for slider4 (index 3) */}
-              {i === 3 && (
-                <div className="absolute inset-0 flex flex-col items-start justify-center text-white text-left pl-4 sm:pl-8 md:pl-16 lg:pl-20 pr-4 z-10">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">MAXHUB X INTEL WHITEPAPER</h2>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">RIZONN X INTEL WHITEPAPER</h2>
                   <h3 className="text-xl sm:text-2xl md:text-3xl mb-6">Transform Your BYOD Meeting Space <br />into a Microsoft Teams Rooms</h3>
                   <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm sm:text-base">
                     Learn More
