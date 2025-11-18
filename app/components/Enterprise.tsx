@@ -17,7 +17,7 @@ const industryContent = {
     title: "Enterprise solutions",
     heading: "Enterprise solutions",
     description:
-      "We offer easy-to-use, high-quality conferencing solutions for all room sizes. Transform your enterprise collaboration with our comprehensive suite of products.",
+      "We provide user-friendly, high-performance conferencing  solutions suitable for every room size.",
     image: enterpriseImg,
   },
   Education: {
@@ -173,14 +173,14 @@ export default function EnterprisePage() {
           </div>
 
           {/* Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-black">
+          <h1 className="text-3xl md:text-3xl lg:text-3xl font-bold mb-4 leading-tight text-black">
             {activeSection === "Industry"
               ? industryContent[activeIndustry].heading
               : platformContent[activePlatform].heading}
           </h1>
 
           {/* Description */}
-          <p className="text-lg md:text-xl text-black mb-6 max-w-2xl leading-relaxed">
+          <p className="text-sm md:text-sm text-black mb-6 max-w-2xl leading-relaxed">
             {activeSection === "Industry"
               ? industryContent[activeIndustry].description
               : platformContent[activePlatform].description}

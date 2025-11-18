@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ProductDropdown from "./ProductDropdown";
+import { productCategories } from "./ProductCategories";
 // Logo imported directly from public folder
 
 export default function Header() {
@@ -12,6 +13,8 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isSolutionsDropdownOpen, setIsSolutionsDropdownOpen] = useState(false);
+  const [isBusinessSolutionsHovered, setIsBusinessSolutionsHovered] = useState(false);
   const [isNavHover, setIsNavHover] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
@@ -101,13 +104,129 @@ export default function Header() {
               </div>
             </div>
 
-            <a href="/enterprise" className="transition-colors text-sm font-nexa-regular cursor-pointer">Solutions</a>
-            <a href="/news" className="transition-colors text-sm font-nexa-regular cursor-pointer">Support</a>
+            <div
+              className="relative"
+              onMouseEnter={() => setIsProductsDropdownOpen(false)}
+            >
+              <button
+                className="transition-colors text-sm font-nexa-regular cursor-pointer flex items-center gap-1 focus:outline-none py-2"
+                onMouseEnter={() => setIsSolutionsDropdownOpen(true)}
+                onMouseLeave={() => setIsSolutionsDropdownOpen(false)}
+              >
+                Solutions
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {/* Solutions Dropdown */}
+              {isSolutionsDropdownOpen && (
+                <div 
+                  className="fixed top-20 left-0 right-0 z-[9999] bg-black/10 backdrop-blur-sm"
+                  onMouseEnter={() => setIsSolutionsDropdownOpen(true)}
+                  onMouseLeave={() => setIsSolutionsDropdownOpen(false)}
+                  onClick={() => setIsSolutionsDropdownOpen(false)}
+                >
+                  <div
+                    className={`absolute top-0 left-0 right-0 max-h-[calc(100vh-4rem)] bg-white shadow-lg border-t border-gray-200 transform transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+                      isSolutionsDropdownOpen ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0"
+                    }`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
+                      {/* Grid layout similar to ProductDropdown */}
+                      <div
+                        className="grid grid-cols-1 lg:grid-cols-[260px_360px_440px] gap-0 items-start border-t pt-4"
+                        onMouseLeave={() => setIsBusinessSolutionsHovered(false)}
+                      >
+                        {/* LEFT COLUMN - Solutions Categories */}
+                        <div className="bg-white border-r border-gray-200 shadow-sm h-full">
+                          <h3 className="text-gray-800 font-semibold text-sm px-4 pt-4"></h3>
+                          <div className="max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+                            <div 
+                              className="hover:bg-gray-50 transition duration-200"
+                              onMouseEnter={() => setIsBusinessSolutionsHovered(true)}
+                            >
+                              <div className="flex items-center justify-between py-2 px-4 text-sm text-gray-700 cursor-pointer">
+                                <span>Business Solutions</span>
+                                <span className="text-gray-400">›</span>
+                              </div>
+                            </div>
+                            <div className="hover:bg-gray-50 transition duration-200">
+                              <a 
+                                href="/alliance" 
+                                className="flex items-center justify-between py-2 px-4 text-sm text-gray-700 hover:text-blue-600"
+                              >
+                                <span>Alliance</span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* MIDDLE COLUMN - Business Solutions Subcategories */}
+                        {isBusinessSolutionsHovered && (
+                          <div className="bg-white p-4 border-r border-gray-200 shadow-sm max-h-[60vh] overflow-y-auto">
+                            <div className="py-2">
+                              <a 
+                                href="/business-solutions#huddle" 
+                                className="block text-sm text-gray-600 hover:text-blue-600 transition"
+                              >
+                                Huddle ›
+                              </a>
+                            </div>
+                            <div className="py-2">
+                              <a 
+                                href="/business-solutions#small" 
+                                className="block text-sm text-gray-600 hover:text-blue-600 transition"
+                              >
+                                Small ›
+                              </a>
+                            </div>
+                            <div className="py-2">
+                              <a 
+                                href="/business-solutions#medium" 
+                                className="block text-sm text-gray-600 hover:text-blue-600 transition"
+                              >
+                                Medium ›
+                              </a>
+                            </div>
+                            <div className="py-2">
+                              <a 
+                                href="/business-solutions#large" 
+                                className="block text-sm text-gray-600 hover:text-blue-600 transition"
+                              >
+                                Large ›
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* RIGHT COLUMN - Empty placeholder to maintain layout */}
+                        <div className="flex flex-col gap-0">
+                          <div className="bg-white p-4 border border-gray-200 shadow-sm rounded-md">
+                            <div className="w-full h-48 flex items-center justify-center bg-gray-50">
+                              <span className="text-gray-400">Select a solution</span>
+                            </div>
+                          </div>
+                          
+                          {isBusinessSolutionsHovered && (
+                            <div className="w-full max-w-sm bg-white p-5 border border-gray-100 shadow-sm mt-4">
+                              <h3 className="text-base font-semibold text-gray-900 mb-2">Business Solutions</h3>
+                              <p className="text-sm text-gray-700">
+                                Comprehensive collaboration solutions designed for every space and team size.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <a href="/news" className="transition-colors text-sm font-nexa-regular cursor-pointer">Networking</a>
             <a href="/about" className="transition-colors text-sm font-nexa-regular cursor-pointer">Explore</a>
-            <a href="#" className="transition-colors text-sm font-nexa-regular flex items-center gap-1 cursor-pointer">
-              Partner Portal
-             
-            </a>
           </nav>
 
           {/* Right-side controls: search pill, language and Contact Sales */}
@@ -204,16 +323,7 @@ export default function Header() {
 
                 {isProductsDropdownOpen && (
                   <div className="mt-2 pl-4 space-y-2">
-                    {[
-                      { title: "Featured", href: "/products/featured" },
-                      { title: "Microsoft Teams Rooms", href: "/products/microsoft-teams-rooms" },
-                      { title: "Interactive Flat Panel", href: "/products/interactive-flat-panel" },
-                      { title: "Commercial Display", href: "/products/commercial-display" },
-                      { title: "LED Display", href: "/products/led-display" },
-                      { title: "Unified Communication", href: "/products/unified-communication" },
-                      { title: "Capture System", href: "/products/capture-system" },
-                      { title: "Accessories", href: "/products/accessories" },
-                      { title: "Software", href: "/products/software" },
+                    {[...productCategories,
                       { title: "All Products", href: "/products/all" },
                     ].map((category, index) => (
                       <Link
@@ -232,10 +342,104 @@ export default function Header() {
                 )}
               </div>
 
-              <a href="/enterprise" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Solutions</a>
-              <a href="/news" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Support</a>
+              {/* Mobile Solutions Dropdown */}
+              <div className="border-b border-white border-opacity-20 pb-2">
+                <button
+                  onClick={() => setIsSolutionsDropdownOpen(!isSolutionsDropdownOpen)}
+                  className="flex justify-between items-center w-full py-2 text-left transition-colors font-nexa-regular cursor-pointer"
+                >
+                  <span>Solutions</span>
+                  <svg
+                    className={`w-5 h-5 transition-transform duration-200 ${isSolutionsDropdownOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {isSolutionsDropdownOpen && (
+                  <div className="mt-2 pl-4 space-y-2">
+                    <div>
+                      <button
+                        onClick={() => setIsBusinessSolutionsHovered(!isBusinessSolutionsHovered)}
+                        className="flex justify-between items-center w-full py-1 text-sm transition-colors cursor-pointer"
+                      >
+                        <span>Business Solutions</span>
+                        <svg
+                          className={`w-4 h-4 transition-transform duration-200 ${isBusinessSolutionsHovered ? 'rotate-90' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                      
+                      {isBusinessSolutionsHovered && (
+                        <div className="mt-1 pl-4 space-y-1">
+                          <a
+                            href="/business-solutions#huddle"
+                            className="block py-1 text-sm transition-colors cursor-pointer text-gray-300 hover:text-white"
+                            onClick={() => {
+                              setIsSolutionsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            Huddle
+                          </a>
+                          <a
+                            href="/business-solutions#small"
+                            className="block py-1 text-sm transition-colors cursor-pointer text-gray-300 hover:text-white"
+                            onClick={() => {
+                              setIsSolutionsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            Small
+                          </a>
+                          <a
+                            href="/business-solutions#medium"
+                            className="block py-1 text-sm transition-colors cursor-pointer text-gray-300 hover:text-white"
+                            onClick={() => {
+                              setIsSolutionsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            Medium
+                          </a>
+                          <a
+                            href="/business-solutions#large"
+                            className="block py-1 text-sm transition-colors cursor-pointer text-gray-300 hover:text-white"
+                            onClick={() => {
+                              setIsSolutionsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            Large
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                    <a
+                      href="/alliance"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsSolutionsDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Alliance
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              <a href="/news" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Networking Solutions</a>
               <a href="/about" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Explore</a>
-              <a href="#" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Partner Portal</a>
               <div className="relative mt-2">
                 <input
                   type="text"
