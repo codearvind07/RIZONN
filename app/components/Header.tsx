@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ProductDropdown from "./ProductDropdown";
+import NetworkingDropdown from "./NetworkingDropdown";
 import { productCategories } from "./ProductCategories";
 // Logo imported directly from public folder
 
@@ -13,17 +14,22 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isNetworkingDropdownOpen, setIsNetworkingDropdownOpen] = useState(false);
   const [isSolutionsDropdownOpen, setIsSolutionsDropdownOpen] = useState(false);
   const [isBusinessSolutionsHovered, setIsBusinessSolutionsHovered] = useState(false);
   const [isNavHover, setIsNavHover] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
+  const networkingDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsProductsDropdownOpen(false);
+      }
+      if (networkingDropdownRef.current && !networkingDropdownRef.current.contains(event.target as Node)) {
+        setIsNetworkingDropdownOpen(false);
       }
     };
 
@@ -43,7 +49,7 @@ export default function Header() {
       // Hide header when scrolling down, show when scrolling up
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         // Only hide header if not hovering over dropdown
-        if (!isProductsDropdownOpen) {
+        if (!isProductsDropdownOpen && !isNetworkingDropdownOpen) {
           setIsVisible(false);
         }
         // Close mobile menu when scrolling
@@ -60,7 +66,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollY, isProductsDropdownOpen]);
+  }, [lastScrollY, isProductsDropdownOpen, isNetworkingDropdownOpen]);
 
   return (
     <header
@@ -89,11 +95,22 @@ export default function Header() {
             <div
               className="relative"
               ref={dropdownRef}
-              onMouseEnter={() => setIsProductsDropdownOpen(true)}
-              onMouseLeave={() => setIsProductsDropdownOpen(false)}
+              onMouseEnter={() => {
+                setIsNetworkingDropdownOpen(false);
+                setIsSolutionsDropdownOpen(false);
+                setIsProductsDropdownOpen(true);
+              }}
             >
               <button
                 className="transition-colors text-sm flex items-center gap-1 focus:outline-none py-2 font-nexa-bold cursor-pointer"
+                onMouseLeave={() => {
+                  // Only close dropdown if not hovering over the dropdown itself
+                  setTimeout(() => {
+                    if (!dropdownContainerRef.current?.matches(':hover')) {
+                      setIsProductsDropdownOpen(false);
+                    }
+                  }, 100);
+                }}
               >
                 Products
                 
@@ -104,13 +121,49 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Networking Dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setIsProductsDropdownOpen(false)}
+              ref={networkingDropdownRef}
+              onMouseEnter={() => {
+                setIsProductsDropdownOpen(false);
+                setIsSolutionsDropdownOpen(false);
+                setIsNetworkingDropdownOpen(true);
+              }}
+            >
+              <button
+                className="transition-colors text-sm flex items-center gap-1 focus:outline-none py-2 font-nexa-bold cursor-pointer"
+                onMouseLeave={() => {
+                  // Only close dropdown if not hovering over the dropdown itself
+                  setTimeout(() => {
+                    if (!networkingDropdownRef.current?.matches(':hover')) {
+                      setIsNetworkingDropdownOpen(false);
+                    }
+                  }, 100);
+                }}
+              >
+                Networking
+              </button>
+
+              <div>
+                <NetworkingDropdown isOpen={isNetworkingDropdownOpen} onClose={() => setIsNetworkingDropdownOpen(false)} />
+              </div>
+            </div>
+
+            <div
+              className="relative"
+              onMouseEnter={() => {
+                setIsProductsDropdownOpen(false);
+                setIsNetworkingDropdownOpen(false);
+              }}
             >
               <button
                 className="transition-colors text-sm font-nexa-regular cursor-pointer flex items-center gap-1 focus:outline-none py-2"
-                onMouseEnter={() => setIsSolutionsDropdownOpen(true)}
+                onMouseEnter={() => {
+                  setIsProductsDropdownOpen(false);
+                  setIsNetworkingDropdownOpen(false);
+                  setIsSolutionsDropdownOpen(true);
+                }}
                 onMouseLeave={() => setIsSolutionsDropdownOpen(false)}
               >
                 Solutions
@@ -225,7 +278,6 @@ export default function Header() {
               )}
             </div>
             
-            <a href="/news" className="transition-colors text-sm font-nexa-regular cursor-pointer">Networking</a>
             <a href="/about" className="transition-colors text-sm font-nexa-regular cursor-pointer">Explore</a>
           </nav>
 
@@ -438,7 +490,88 @@ export default function Header() {
                 )}
               </div>
 
-              <a href="/news" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Networking Solutions</a>
+              <div className="border-b border-white border-opacity-20 pb-2">
+                <button
+                  onClick={() => setIsNetworkingDropdownOpen(!isNetworkingDropdownOpen)}
+                  className="flex justify-between items-center w-full py-2 text-left transition-colors font-nexa-regular cursor-pointer"
+                >
+                  <span>Networking</span>
+                  <svg
+                    className={`w-5 h-5 transition-transform duration-200 ${isNetworkingDropdownOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {isNetworkingDropdownOpen && (
+                  <div className="mt-2 pl-4 space-y-2">
+                    <a
+                      href="/networking/indio-cloud"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsNetworkingDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Indio Cloud
+                    </a>
+                    <a
+                      href="/networking/indio-connect"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsNetworkingDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Indio Connect
+                    </a>
+                    <a
+                      href="/networking/wireless-access-points"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsNetworkingDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Wireless Access Points
+                    </a>
+                    <a
+                      href="/networking/unibox-controllers"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsNetworkingDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      UniBox Controllers
+                    </a>
+                    <a
+                      href="/networking/managed-poe-switches"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsNetworkingDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Managed PoE Switches
+                    </a>
+                    <a
+                      href="/networking/4g-5g-routers"
+                      className="block py-1 text-sm transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsNetworkingDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      4G/5G Routers
+                    </a>
+                  </div>
+                )}
+              </div>
               <a href="/about" className="transition-colors py-2 border-b border-white border-opacity-20 font-nexa-regular cursor-pointer">Explore</a>
               <div className="relative mt-2">
                 <input
